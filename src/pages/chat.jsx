@@ -1,34 +1,46 @@
 import { useState, useEffect, useRef } from "react";
-import axios from "@/api/axios"; // your axios instance
+import axios from "@/api/axios"; // adjust if alias doesn't work
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const username = localStorage.getItem("username");
-  const chatBoxRef = useRef(null); // for auto-scrolling
+  const chatBoxRef = useRef(null);
 
-  // ✅ Fetch messages every 3 seconds
+  // 🔁 Poll messages every 3 seconds
   useEffect(() => {
     const fetchMessages = () => {
-      axios.get("/api/messages")
+      axios
+        .get("/api/messages")
         .then((res) => setMessages(res.data))
         .catch((err) => console.error("Fetch error:", err));
     };
 
-    fetchMessages(); // Initial fetch
-    const interval = setInterval(fetchMessages, 3000); // Poll every 3s
-
-    return () => clearInterval(interval); // Clean up on unmount
+    fetchMessages(); // initial fetch
+    const interval = setInterval(fetchMessages, 3000); // repeat every 3s
+    return () => clearInterval(interval); // clean up
   }, []);
 
-  // ✅ Auto-scroll to bottom when messages update
+  // ⬇️ Scroll to bottom on new messages
   useEffect(() => {
     if (chatBoxRef.current) {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
   }, [messages]);
 
-  // ... sendMessage, return JSX etc. (leave that as you already have)
+  // ✉️ Send message
+  const sendMessage = async () => {
+    if (input.trim() === "") return;
+
+    const newMessage = { sender: username, text: input };
+    try {
+      await axios.post("/api/messages", newMessage);
+      setMessages((prev) => [...prev, newMessage]);
+      setInput("");
+    } catch (err) {
+      console.error("Send error:", err);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-pink-50 p-4">
@@ -42,7 +54,9 @@ export default function Chat() {
             <div
               key={idx}
               className={`p-2 rounded-lg max-w-[80%] ${
-                msg.sender === username ? "bg-rose-200 ml-auto text-right" : "bg-gray-200 text-left"
+                msg.sender === username
+                  ? "bg-rose-200 ml-auto text-right"
+                  : "bg-gray-200 text-left"
               }`}
             >
               <p className="text-sm text-gray-700">{msg.sender}</p>
@@ -50,7 +64,7 @@ export default function Chat() {
             </div>
           ))}
         </div>
-        {/* Input and button */}
+
         <div className="flex gap-2 mt-4">
           <input
             value={input}
