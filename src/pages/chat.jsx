@@ -1,13 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import axios from "@/api/axios"; // adjust if alias doesn't work
+import axios from "@/api/axios"; // or relative path
 
-export default function Chat() {
+export default function Chat({ username, sessionId }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const username = localStorage.getItem("username");
   const chatBoxRef = useRef(null);
 
-  // 🔁 Poll messages every 3 seconds
   useEffect(() => {
     const fetchMessages = () => {
       axios
@@ -16,23 +14,21 @@ export default function Chat() {
         .catch((err) => console.error("Fetch error:", err));
     };
 
-    fetchMessages(); // initial fetch
-    const interval = setInterval(fetchMessages, 3000); // repeat every 3s
-    return () => clearInterval(interval); // clean up
+    fetchMessages();
+    const interval = setInterval(fetchMessages, 3000);
+    return () => clearInterval(interval);
   }, []);
 
-  // ⬇️ Scroll to bottom on new messages
   useEffect(() => {
     if (chatBoxRef.current) {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
   }, [messages]);
 
-  // ✉️ Send message
   const sendMessage = async () => {
     if (input.trim() === "") return;
 
-    const newMessage = { sender: username, text: input };
+    const newMessage = { sender: username, text: input, sessionId };
     try {
       await axios.post("/api/messages", newMessage);
       setMessages((prev) => [...prev, newMessage]);
