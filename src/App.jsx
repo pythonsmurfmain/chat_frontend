@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Chat from "./Chat";
-import Login from "./Login";
+import Chat from "./pages/chat";
+import Login from "./login";
 
 export default function App() {
   const [username, setUsername] = useState(null);
