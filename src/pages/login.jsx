@@ -17,7 +17,7 @@ export default function Login({ onLogin }) {
   };
 
   return (
-    <div className="min-h-screen bg-rose-500 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-rose-100 flex items-center justify-center px-4">
       <motion.div
   initial={{ opacity: 0, y: 30 }}
   animate={{ opacity: 1, y: 0 }}
