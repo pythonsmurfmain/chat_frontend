@@ -7,11 +7,18 @@ export default function Chat() {
   const username = localStorage.getItem("username");
 
   useEffect(() => {
-    // Fetch chat history from backend
+  const fetchMessages = () => {
     axios.get("/api/messages")
       .then((res) => setMessages(res.data))
       .catch((err) => console.error("Fetch error:", err));
-  }, []);
+  };
+
+  fetchMessages(); // initial load
+  const interval = setInterval(fetchMessages, 3000); // fetch every 3 seconds
+
+  return () => clearInterval(interval); // cleanup on component unmount
+}, []);
+
 
   const sendMessage = async () => {
   if (input.trim() === "") return;
