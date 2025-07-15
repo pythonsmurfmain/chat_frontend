@@ -1,9 +1,8 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "https://chat-backend-x2zf.onrender.com/", // Replace with your actual Render backend URL
+  baseURL: "https://chat-backend-x2zf.onrender.com/",
   withCredentials: true,
 });
-axios.post('/api/messages', { text: message }, { withCredentials: true });
 
 export default instance;
