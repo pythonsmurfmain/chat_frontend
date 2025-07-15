@@ -14,17 +14,18 @@ export default function Chat() {
   }, []);
 
   const sendMessage = async () => {
-    if (input.trim() === "") return;
+  if (input.trim() === "") return;
 
-    const newMessage = { sender: username, text: input };
-    try {
-      await axios.post("/api/messages", data);;
-      setMessages([...messages, newMessage]);
-      setInput("");
-    } catch (err) {
-      console.error("Send error:", err);
-    }
-  };
+  const newMessage = { sender: username, text: input };
+  try {
+    await axios.post("/api/messages", newMessage); // ✅ FIXED
+    setMessages([...messages, newMessage]);
+    setInput("");
+  } catch (err) {
+    console.error("Send error:", err);
+  }
+};
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-pink-50 p-4">
