@@ -1,44 +1,43 @@
-import { useState, useEffect } from "react";
-import axios from "@/api/axios"; // assuming alias or correct relative path
+import { useState, useEffect, useRef } from "react";
+import axios from "@/api/axios"; // your axios instance
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const username = localStorage.getItem("username");
+  const chatBoxRef = useRef(null); // for auto-scrolling
 
+  // ✅ Fetch messages every 3 seconds
   useEffect(() => {
-  const fetchMessages = () => {
-    axios.get("/api/messages")
-      .then((res) => setMessages(res.data))
-      .catch((err) => console.error("Fetch error:", err));
-  };
+    const fetchMessages = () => {
+      axios.get("/api/messages")
+        .then((res) => setMessages(res.data))
+        .catch((err) => console.error("Fetch error:", err));
+    };
 
-  fetchMessages(); // initial load
-  const interval = setInterval(fetchMessages, 3000); // fetch every 3 seconds
+    fetchMessages(); // Initial fetch
+    const interval = setInterval(fetchMessages, 3000); // Poll every 3s
 
-  return () => clearInterval(interval); // cleanup on component unmount
-}, []);
+    return () => clearInterval(interval); // Clean up on unmount
+  }, []);
 
+  // ✅ Auto-scroll to bottom when messages update
+  useEffect(() => {
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }
+  }, [messages]);
 
-  const sendMessage = async () => {
-  if (input.trim() === "") return;
-
-  const newMessage = { sender: username, text: input };
-  try {
-    await axios.post("/api/messages", newMessage); // ✅ FIXED
-    setMessages([...messages, newMessage]);
-    setInput("");
-  } catch (err) {
-    console.error("Send error:", err);
-  }
-};
-
+  // ... sendMessage, return JSX etc. (leave that as you already have)
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-pink-50 p-4">
       <div className="w-full max-w-md bg-white rounded-xl shadow-xl p-4">
         <h1 className="text-2xl font-bold text-center text-rose-600 mb-4">Our chat 😊</h1>
-        <div className="h-80 overflow-y-auto space-y-2 p-2 bg-rose-50 rounded-md">
+        <div
+          ref={chatBoxRef}
+          className="h-80 overflow-y-auto space-y-2 p-2 bg-rose-50 rounded-md"
+        >
           {messages.map((msg, idx) => (
             <div
               key={idx}
@@ -51,6 +50,7 @@ export default function Chat() {
             </div>
           ))}
         </div>
+        {/* Input and button */}
         <div className="flex gap-2 mt-4">
           <input
             value={input}
