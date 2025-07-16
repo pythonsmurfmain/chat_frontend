@@ -1,5 +1,6 @@
+// Chat.jsx
 import { useState, useEffect, useRef } from "react";
-import axios from "@/api/axios";
+import axios from "@/api/axios"; // adjust if needed
 import { BsSun, BsMoon } from "react-icons/bs";
 
 export default function Chat({ username, onLogout }) {
@@ -28,7 +29,7 @@ export default function Chat({ username, onLogout }) {
   }, [messages]);
 
   const sendMessage = async () => {
-    if (!input.trim()) return;
+    if (input.trim() === "") return;
 
     const newMessage = { sender: username, text: input };
     try {
@@ -44,8 +45,8 @@ export default function Chat({ username, onLogout }) {
 
   return (
     <div
-      className={`min-h-screen p-4 transition-all duration-500 flex flex-col items-center justify-center ${
-        darkMode ? "bg-gray-900 text-white" : "bg-pink-50 text-black"
+      className={`flex flex-col items-center justify-center min-h-screen p-4 transition-all duration-500 ${
+        darkMode ? "bg-gray-900 text-white" : "bg-rose-50 text-black"
       }`}
     >
       <div className="absolute top-4 right-4 flex items-center gap-3">
@@ -63,32 +64,30 @@ export default function Chat({ username, onLogout }) {
         </button>
       </div>
 
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-4">
-        <h1 className="text-2xl font-bold text-center text-rose-500 mb-4">
+      <div className="w-full max-w-md bg-white/80 dark:bg-gray-800 rounded-2xl shadow-2xl p-4">
+        <h1
+          className="text-2xl font-bold text-center text-transparent bg-gradient-to-r from-rose-500 via-pink-500 to-purple-500 bg-clip-text animate-pulse mb-4"
+        >
           Our chat 😊
         </h1>
 
         <div
           ref={chatBoxRef}
           className={`h-80 overflow-y-auto space-y-2 p-2 rounded-md ${
-            darkMode ? "bg-gray-800" : "bg-rose-100"
+            darkMode ? "bg-gray-700" : "bg-rose-100"
           }`}
         >
           {messages.map((msg, idx) => (
             <div
               key={idx}
               className={`p-3 rounded-xl max-w-[80%] shadow-md text-sm whitespace-pre-wrap break-words ${
-                msg.sender === username
-                  ? `${
-                      darkMode
-                        ? "bg-rose-600 text-white ml-auto text-right"
-                        : "bg-rose-300 text-black ml-auto text-right"
-                    }`
-                  : `${
-                      darkMode
-                        ? "bg-gray-700 text-white text-left"
-                        : "bg-gray-200 text-black text-left"
-                    }`
+                msg.sender.toLowerCase() === username.toLowerCase()
+                  ? darkMode
+                    ? "bg-rose-600 text-white ml-auto text-right"
+                    : "bg-rose-300 text-black ml-auto text-right"
+                  : darkMode
+                  ? "bg-gray-600 text-white text-left"
+                  : "bg-gray-200 text-black text-left"
               }`}
             >
               <p className="text-xs font-semibold">{msg.sender}</p>
@@ -97,7 +96,7 @@ export default function Chat({ username, onLogout }) {
           ))}
         </div>
 
-        <div className="flex gap-2 mt-4 w-full">
+        <div className="flex gap-2 mt-4 flex-wrap">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
