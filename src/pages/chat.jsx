@@ -43,14 +43,15 @@ export default function Chat({ username, onLogout }) {
     <div className="flex flex-col items-center justify-center min-h-screen bg-pink-50 p-4">
       <div className="w-full max-w-md bg-white rounded-xl shadow-xl p-4">
         <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold text-rose-600">Our chat 😊</h1>
-          <button
-            onClick={onLogout}
-            className="text-sm text-rose-500 hover:text-rose-700"
-          >
-            Logout
-          </button>
-        </div>
+  <h1 className="text-2xl font-bold text-rose-600">Our chat 😊</h1>
+  <button
+    onClick={onLogout}
+    className="bg-rose-100 text-rose-600 text-sm px-3 py-1 rounded-full border border-rose-300 hover:bg-rose-200 hover:text-rose-700 transition-all"
+  >
+    Logout
+  </button>
+</div>
+
 
         <div
           ref={chatBoxRef}
