@@ -59,7 +59,7 @@ export default function Chat({ username, onLogout }) {
           {messages.map((msg, idx) => (
             <div
               key={idx}
-              className={`p-2 rounded-lg max-w-[80%] ${
+              className={`p-2 rounded-2xl max-w-[80%] break-words ${
                 msg.sender === username
                   ? "bg-rose-200 ml-auto text-right"
                   : "bg-gray-200 text-left"
@@ -71,7 +71,7 @@ export default function Chat({ username, onLogout }) {
           ))}
         </div>
 
-        <div className="flex gap-2 mt-4">
+        <div className="flex gap-2 mt-4 flex-wrap sm:flex-nowrap">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
