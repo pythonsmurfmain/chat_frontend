@@ -1,12 +1,25 @@
-import { useState } from "react";
-import Login from "./pages/login";
-import Chat from "./pages/chat";
+import { useEffect, useState } from "react";
+import axios from "@/api/axios";
+import Login from "@/pages/Login";
+import Chat from "@/pages/Chat";
 
 export default function App() {
   const [username, setUsername] = useState(null);
 
-  const handleLogin = (u) => {
-    setUsername(u);
+  // 🔁 On mount, check if user session is still valid
+  useEffect(() => {
+    axios
+      .get("/api/me", { withCredentials: true })
+      .then((res) => {
+        setUsername(res.data.username);
+      })
+      .catch(() => {
+        setUsername(null); // session invalid or not logged in
+      });
+  }, []);
+
+  const handleLogin = (name) => {
+    setUsername(name);
   };
 
   const handleLogout = () => {
