@@ -64,7 +64,7 @@ export default function Chat({ username, onLogout }) {
         </button>
       </div>
 
-      <div className="w-full max-w-md bg-white/60 backdrop-blur-xl rounded-2xl shadow-2xl p-4">
+      <div className="w-full max-w-md sm:max-w-lg bg-white/60 backdrop-blur-xl rounded-2xl shadow-2xl p-4">
         <h1
           className="text-2xl font-bold text-center text-transparent bg-gradient-to-r from-rose-500 via-pink-500 to-purple-500 bg-clip-text animate-pulse mb-4"
         >
@@ -75,34 +75,43 @@ export default function Chat({ username, onLogout }) {
           ref={chatBoxRef}
           className="h-80 overflow-y-auto space-y-2 p-2 bg-white/70 backdrop-blur-md rounded-md"
         >
-          {messages.map((msg, idx) => (
-            <div
-              key={idx}
-              className={`relative p-2 rounded-xl max-w-[80%] text-sm whitespace-pre-wrap break-words shadow-md ${
-                msg.sender === username
-                  ? "bg-rose-300 ml-auto text-right before:content-[''] before:absolute before:-right-2 before:top-2 before:border-t-8 before:border-t-rose-300 before:border-l-8 before:border-transparent"
-                  : "bg-gray-300 text-left before:content-[''] before:absolute before:-left-2 before:top-2 before:border-t-8 before:border-t-gray-300 before:border-r-8 before:border-transparent"
-              }`}
-            >
-              <p className="text-xs text-gray-600">{msg.sender}</p>
-              <p className="font-medium">{msg.text}</p>
-            </div>
-          ))}
+          {messages.map((msg, idx) => {
+            const isUser = msg.sender === username;
+            return (
+              <div
+                key={idx}
+                className={`relative p-3 rounded-lg max-w-[75%] text-sm shadow-md ${
+                  isUser
+                    ? "bg-rose-500 text-white ml-auto rounded-br-none"
+                    : "bg-gray-200 text-gray-900 mr-auto rounded-bl-none"
+                }`}
+              >
+                {!isUser && (
+                  <p className="text-xs font-semibold text-gray-700 mb-1">
+                    {msg.sender}
+                  </p>
+                )}
+                <p className="whitespace-pre-wrap break-words">{msg.text}</p>
+              </div>
+            );
+          })}
         </div>
 
-        <div className="flex gap-2 mt-4">
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your message..."
-            className="flex-grow px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-rose-400"
-          />
-          <button
-            onClick={sendMessage}
-            className="bg-rose-500 text-white px-4 py-2 rounded-md hover:bg-rose-600"
-          >
-            Send
-          </button>
+        <div className="flex flex-col gap-2 mt-4">
+          <div className="flex flex-col sm:flex-row gap-2">
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Type your message..."
+              className="flex-grow px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-rose-400"
+            />
+            <button
+              onClick={sendMessage}
+              className="bg-rose-500 text-white px-4 py-2 rounded-md hover:bg-rose-600 w-full sm:w-auto"
+            >
+              Send
+            </button>
+          </div>
         </div>
       </div>
     </div>
