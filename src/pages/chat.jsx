@@ -1,6 +1,6 @@
 // Chat.jsx
 import { useState, useEffect, useRef } from "react";
-import axios from "@/api/axios"; // adjust if needed
+import axios from "@/api/axios";
 
 export default function Chat({ username, onLogout }) {
   const [messages, setMessages] = useState([]);
@@ -59,14 +59,14 @@ export default function Chat({ username, onLogout }) {
           {messages.map((msg, idx) => (
             <div
               key={idx}
-              className={`p-2 rounded-2xl max-w-[80%] break-words ${
+              className={`p-2 px-4 py-2 rounded-2xl max-w-[80%] break-words shadow-sm ${
                 msg.sender === username
                   ? "bg-rose-200 ml-auto text-right"
-                  : "bg-gray-200 text-left"
+                  : "bg-gray-200 mr-auto text-left"
               }`}
             >
-              <p className="text-sm text-gray-700">{msg.sender}</p>
-              <p className="font-medium">{msg.text}</p>
+              <p className="text-xs text-gray-600">{msg.sender}</p>
+              <p className="font-medium text-black">{msg.text}</p>
             </div>
           ))}
         </div>
