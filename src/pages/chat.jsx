@@ -1,7 +1,8 @@
+// Chat.jsx
 import { useState, useEffect, useRef } from "react";
-import axios from "@/api/axios"; // or relative path
+import axios from "@/api/axios"; // adjust if needed
 
-export default function Chat({ username, sessionId }) {
+export default function Chat({ username, onLogout }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const chatBoxRef = useRef(null);
@@ -28,7 +29,7 @@ export default function Chat({ username, sessionId }) {
   const sendMessage = async () => {
     if (input.trim() === "") return;
 
-    const newMessage = { sender: username, text: input, sessionId };
+    const newMessage = { sender: username, text: input };
     try {
       await axios.post("/api/messages", newMessage);
       setMessages((prev) => [...prev, newMessage]);
@@ -41,7 +42,16 @@ export default function Chat({ username, sessionId }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-pink-50 p-4">
       <div className="w-full max-w-md bg-white rounded-xl shadow-xl p-4">
-        <h1 className="text-2xl font-bold text-center text-rose-600 mb-4">Our chat 😊</h1>
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-bold text-rose-600">Our chat 😊</h1>
+          <button
+            onClick={onLogout}
+            className="text-sm text-rose-500 hover:text-rose-700"
+          >
+            Logout
+          </button>
+        </div>
+
         <div
           ref={chatBoxRef}
           className="h-80 overflow-y-auto space-y-2 p-2 bg-rose-50 rounded-md"

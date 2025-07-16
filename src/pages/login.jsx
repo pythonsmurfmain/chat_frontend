@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "@/api/axios"; // adjust if needed
 import { motion } from "framer-motion";
+
 export default function Login({ onLogin }) {
   const [username, setUsername] = useState("");
 
@@ -9,8 +10,8 @@ export default function Login({ onLogin }) {
 
     try {
       const res = await axios.post("/api/login", { username });
-      const { username: u, sessionId } = res.data;
-      onLogin(u, sessionId);
+      const { username: u } = res.data; // ✅ sessionId is now in cookie
+      onLogin(u); // ✅ pass only username
     } catch (err) {
       console.error("Login error:", err);
     }
@@ -19,13 +20,11 @@ export default function Login({ onLogin }) {
   return (
     <div className="min-h-screen bg-rose-200 flex items-center justify-center px-4">
       <motion.div
-  initial={{ opacity: 0, y: 30 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.5 }}
-  className="bg-white w-full max-w-sm sm:max-w-md md:max-w-xl lg:max-w-2xl xl:max-w-3xl rounded-2xl shadow-xl p-6 sm:p-8 md:p-10"
->
-
-
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-white w-full max-w-sm sm:max-w-md md:max-w-xl lg:max-w-2xl xl:max-w-3xl rounded-2xl shadow-xl p-6 sm:p-8 md:p-10"
+      >
         <h1 className="text-2xl font-bold text-center text-rose-600 mb-4">
           Welcome 😊
         </h1>
