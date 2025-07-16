@@ -1,5 +1,6 @@
+// Login.jsx
 import { useState } from "react";
-import axios from "@/api/axios"; // adjust if needed
+import axios from "@/api/axios";
 import { motion } from "framer-motion";
 
 export default function Login({ onLogin }) {
@@ -10,8 +11,12 @@ export default function Login({ onLogin }) {
 
     try {
       const res = await axios.post("/api/login", { username });
-      const { username: u } = res.data; // ✅ sessionId is now in cookie
-      onLogin(u); // ✅ pass only username
+      const { username: u } = res.data; // ✅ sessionId stored in cookie
+      if (typeof onLogin === "function") {
+        onLogin(u); // ✅ only pass username now
+      } else {
+        console.warn("onLogin is not a function");
+      }
     } catch (err) {
       console.error("Login error:", err);
     }
