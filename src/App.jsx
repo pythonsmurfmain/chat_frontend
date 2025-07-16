@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "@/api/axios";
-import Login from "@/pages/Login";
-import Chat from "@/pages/Chat";
+import Login from "@/pages/login";
+import Chat from "@/pages/chat";
 
 export default function App() {
   const [username, setUsername] = useState(null);
